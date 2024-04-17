@@ -19,23 +19,27 @@
 
 import torch
 from typing import List
+import template
+import hashlib
+from template.validator.rafacoin import add_rafacoin_hash
 
 
-def reward(query: int, response: int) -> float:
-    """
-    Reward the miner response to the dummy request. This method returns a reward
-    value for the miner, which is used to update the miner's score.
+def block_validation(values: template.protocol.Dummy, response: int) -> float:
+    hash_data = (str(values.block_number) + values.transactions + values.previous_hash + str(response))
+    hash = hashlib.sha256(hash_data.encode()).hexdigest()
 
-    Returns:
-    - float: The reward value for the miner.
-    """
+    if (hash.startswith("0" * values.dificulty)) and (
+            not values.previous_hash or int(hash, 16) < int(values.previous_hash, 16)):
 
-    return 1.0 if response == query * 2 else 0
+        # Add validated hash to blockchain
+        add_rafacoin_hash(hash)
+        return 1
+    return 0
 
 
 def get_rewards(
     self,
-    query: int,
+    values: int,
     responses: List[float],
 ) -> torch.FloatTensor:
     """
@@ -49,6 +53,12 @@ def get_rewards(
     - torch.FloatTensor: A tensor of rewards for the given query and responses.
     """
     # Get all the reward results by iteratively calling your reward() function.
-    return torch.FloatTensor(
-        [reward(query, response) for response in responses]
-    ).to(self.device)
+    weights = []
+    for response in responses:
+        weight = 0
+        if response.dendrite.status_code == 200:
+            weight = block_validation(values, response)
+        weights.append(weight)
+
+    # Get all the reward results by iteratively calling your reward() function.
+    return torch.FloatTensor(weights).to(self.device)

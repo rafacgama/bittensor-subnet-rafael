@@ -19,6 +19,7 @@
 
 import time
 import typing
+import hashlib
 import bittensor as bt
 
 # Bittensor Miner Template:
@@ -39,11 +40,10 @@ class Miner(BaseMinerNeuron):
 
     def __init__(self, config=None):
         super(Miner, self).__init__(config=config)
-
-        # TODO(developer): Anything specific to your use case you can do here
+        self.max_nonce = 1000000000000
 
     async def forward(
-        self, synapse: template.protocol.Dummy
+            self, synapse: template.protocol.Dummy
     ) -> template.protocol.Dummy:
         """
         Processes the incoming 'Dummy' synapse by performing a predefined operation on the input data.
@@ -58,12 +58,22 @@ class Miner(BaseMinerNeuron):
         The 'forward' function is a placeholder and should be overridden with logic that is appropriate for
         the miner's intended operation. This method demonstrates a basic transformation of input data.
         """
-        # TODO(developer): Replace with actual implementation logic.
-        synapse.dummy_output = synapse.dummy_input * 2
+        nonce = 0
+        while nonce < self.max_nonce:
+            hash_data = (str(synapse.block_number) + synapse.transactions + synapse.previous_hash + str(nonce))
+            hash = hashlib.sha256(hash_data.encode()).hexdigest()
+
+            if (hash.startswith("0" * synapse.dificulty)) and (
+                    not synapse.previous_hash or int(hash, 16) < int(synapse.previous_hash, 16)):
+                break  # Solution found
+            nonce += 1
+
+        synapse.output_nonce = nonce
+
         return synapse
 
     async def blacklist(
-        self, synapse: template.protocol.Dummy
+            self, synapse: template.protocol.Dummy
     ) -> typing.Tuple[bool, str]:
         """
         Determines whether an incoming request should be blacklisted and thus ignored. Your implementation should
@@ -97,8 +107,8 @@ class Miner(BaseMinerNeuron):
         # TODO(developer): Define how miners should blacklist requests.
         uid = self.metagraph.hotkeys.index(synapse.dendrite.hotkey)
         if (
-            not self.config.blacklist.allow_non_registered
-            and synapse.dendrite.hotkey not in self.metagraph.hotkeys
+                not self.config.blacklist.allow_non_registered
+                and synapse.dendrite.hotkey not in self.metagraph.hotkeys
         ):
             # Ignore requests from un-registered entities.
             bt.logging.trace(
