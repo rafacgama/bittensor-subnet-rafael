@@ -65,11 +65,13 @@ class Miner(BaseMinerNeuron):
 
             if (hash.startswith("0" * synapse.dificulty)) and (
                     not synapse.previous_hash or int(hash, 16) < int(synapse.previous_hash, 16)):
-                break  # Solution found
+                bt.logging(f'Successfully mined rafacoins with nonce value {nonce}')
+                synapse.output_nonce = nonce
+                return synapse
             nonce += 1
 
+        bt.logging(f'Count not find correct hash after trying {self.max_nonce} times')
         synapse.output_nonce = nonce
-
         return synapse
 
     async def blacklist(

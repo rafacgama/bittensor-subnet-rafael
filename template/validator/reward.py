@@ -1,8 +1,7 @@
 # The MIT License (MIT)
 # Copyright © 2023 Yuma Rao
-# TODO(developer): Set your name
+# Rafael Gama
 # Copyright © 2023 <your name>
-
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the “Software”), to deal in the Software without restriction, including without limitation
 # the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
@@ -18,20 +17,21 @@
 # DEALINGS IN THE SOFTWARE.
 
 import torch
+import bittensor as bt
 from typing import List
 import template
 import hashlib
 from template.validator.rafacoin import add_rafacoin_hash
 
 
-def block_validation(values: template.protocol.Dummy, response: int) -> float:
+def hash_validation(values: template.protocol.Dummy, response: int) -> float:
     hash_data = (str(values.block_number) + values.transactions + values.previous_hash + str(response))
     hash = hashlib.sha256(hash_data.encode()).hexdigest()
 
     if (hash.startswith("0" * values.dificulty)) and (
             not values.previous_hash or int(hash, 16) < int(values.previous_hash, 16)):
 
-        # Add validated hash to blockchain
+        bt.logging(f'New hash: {hash} was validated and added to rafacoin ledger')
         add_rafacoin_hash(hash)
         return 1
     return 0
@@ -57,7 +57,7 @@ def get_rewards(
     for response in responses:
         weight = 0
         if response.dendrite.status_code == 200:
-            weight = block_validation(values, response)
+            weight = hash_validation(values, response)
         weights.append(weight)
 
     # Get all the reward results by iteratively calling your reward() function.
