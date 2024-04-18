@@ -55,13 +55,11 @@ The miner/validator logic can be found in this repo under:
 - Miner: `neurons/miner/py`
 - Validator: `template/validator/forward.py`
 
-As of the time of this writing, nearly 72,000 blocks have been mined. Below are the Miner and Validator wallets.
-
 ---
 
 ## Wallets
 
-Results after +-70,000 blocks mined and validated:
+As of the time of this writing, nearly 72,000 blocks have been mined. Below are the Miner and Validator wallets.
 
 **Miner**    
 ```                                            
