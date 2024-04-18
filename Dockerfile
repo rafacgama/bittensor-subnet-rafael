@@ -20,8 +20,6 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 WORKDIR /app
 
-COPY create_subnet.sh .
-
 RUN git clone https://github.com/opentensor/subtensor.git && cd subtensor && git checkout main
 
 WORKDIR /app

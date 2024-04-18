@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 # Copyright © 2023 Yuma Rao
-# TODO(developer): Set your name
+# Rafael Gama
 # Copyright © 2023 <your name>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -45,7 +45,7 @@ async def forward(self):
         transactions=f'{fake.name}->{fake.name}->{fake.random_int(0, 100)}'
                      f'{fake.name}->{fake.name}->{fake.random_int(0, 100)}',
         previous_hash=get_last_rafacoin_hash(),
-        dificulty=3
+        dificulty=4
     )
 
     # The dendrite client queries the network.
@@ -64,7 +64,7 @@ async def forward(self):
 
     # TODO(developer): Define how the validator scores responses.
     # Adjust the scores based on responses from miners.
-    rewards = get_rewards(self, query=values, responses=responses)
+    rewards = get_rewards(self, values=values, responses=responses)
 
     bt.logging.info(f"Scored responses: {rewards}")
     # Update the scores based on the rewards. You may want to define your own update_scores function for custom behavior.

@@ -28,19 +28,17 @@ def hash_validation(values: template.protocol.Dummy, response: int) -> float:
     hash_data = (str(values.block_number) + values.transactions + values.previous_hash + str(response))
     hash = hashlib.sha256(hash_data.encode()).hexdigest()
 
-    if (hash.startswith("0" * values.dificulty)) and (
-            not values.previous_hash or int(hash, 16) < int(values.previous_hash, 16)):
-
-        bt.logging(f'New hash: {hash} was validated and added to rafacoin ledger')
+    if hash.startswith("0" * values.dificulty):
+        bt.logging.info(f'New hash: {hash} was validated and added to rafacoin ledger')
         add_rafacoin_hash(hash)
         return 1
     return 0
 
 
 def get_rewards(
-    self,
-    values: int,
-    responses: List[float],
+        self,
+        values: int,
+        responses: List[float],
 ) -> torch.FloatTensor:
     """
     Returns a tensor of rewards for the given query and responses.
@@ -55,9 +53,7 @@ def get_rewards(
     # Get all the reward results by iteratively calling your reward() function.
     weights = []
     for response in responses:
-        weight = 0
-        if response.dendrite.status_code == 200:
-            weight = hash_validation(values, response)
+        weight = hash_validation(values, response)
         weights.append(weight)
 
     # Get all the reward results by iteratively calling your reward() function.

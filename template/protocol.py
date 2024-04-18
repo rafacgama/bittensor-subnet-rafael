@@ -40,7 +40,7 @@ class Dummy(bt.Synapse):
     dificulty: int
 
     # Optional request output, filled by recieving axon.
-    dummy_output: typing.Optional[int] = None
+    output_nonce: typing.Optional[int] = None
 
     def deserialize(self) -> int:
         """

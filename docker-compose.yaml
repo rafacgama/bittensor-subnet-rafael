@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  bittensor_subnet:
+    container_name: bittensor_subnet
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app/bittensor-subnet-rafael
+    environment:
+      - PYTHONPATH=/app/bittensor-subnet-rafael

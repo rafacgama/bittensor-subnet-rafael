@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 # Copyright © 2023 Yuma Rao
-# TODO(developer): Set your name
+# Rafael Gama
 # Copyright © 2023 <your name>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -63,14 +63,13 @@ class Miner(BaseMinerNeuron):
             hash_data = (str(synapse.block_number) + synapse.transactions + synapse.previous_hash + str(nonce))
             hash = hashlib.sha256(hash_data.encode()).hexdigest()
 
-            if (hash.startswith("0" * synapse.dificulty)) and (
-                    not synapse.previous_hash or int(hash, 16) < int(synapse.previous_hash, 16)):
-                bt.logging(f'Successfully mined rafacoins with nonce value {nonce}')
+            if hash.startswith("0" * synapse.dificulty):
+                bt.logging.info(f'Successfully mined rafacoins with nonce value {nonce}')
                 synapse.output_nonce = nonce
                 return synapse
             nonce += 1
 
-        bt.logging(f'Count not find correct hash after trying {self.max_nonce} times')
+        bt.logging.info(f'Count not find correct hash after trying {self.max_nonce} times')
         synapse.output_nonce = nonce
         return synapse
 
