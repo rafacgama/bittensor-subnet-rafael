@@ -1,8 +1,6 @@
 <div align="center">
 
 # **Bitcoin-like Bittensor Subnet** <!-- omit in toc -->
-[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg)](https://discord.gg/bittensor)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
 
 </div>
@@ -12,6 +10,7 @@
 - [Installation](#installation)
 - [Wallets](#wallets)
 
+---
 
 ## Introduction
 
@@ -22,6 +21,7 @@ previous block. The difficulty integer value represents the number of zeros the 
 
 A couple of things to notice are that this subnet does not support concurrency and only one miner can be created.
 
+---
 
 ## Installation
 
@@ -56,6 +56,8 @@ The miner/validator logic can be found in this repo under:
 - Validator: `template/validator/forward.py`
 
 As of the time of this writing, nearly 72,000 blocks have been mined. Below are the Miner and Validator wallets.
+
+---
 
 ## Wallets
 
