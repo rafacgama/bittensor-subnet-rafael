@@ -61,6 +61,8 @@ As of the time of this writing, nearly 72,000 blocks have been mined. Below are 
 
 ## Wallets
 
+Results after +-70,000 blocks mined and validated:
+
 **Miner**    
 ```                                            
 Subnet: 1                                                                                                                                                                            
