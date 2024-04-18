@@ -1,6 +1,6 @@
 <div align="center">
 
-# **Bitcoin-like Bittensor Subnet** <!-- omit in toc -->
+# **Bitcoin-inspired Bittensor Subnet** <!-- omit in toc -->
 
 
 </div>
